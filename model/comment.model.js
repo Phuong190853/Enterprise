@@ -6,6 +6,7 @@ var commentSchema = new mongoose.Schema({
     text: String,
     ideaId: String,
     userId: String,
+    anonymous: String,
     date: Date
 },
 { collection : 'Comment' }

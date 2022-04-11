@@ -174,10 +174,15 @@ router.get('/view', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
 
@@ -220,10 +225,15 @@ router.get('/date', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
     res.render('staff/staff', { model: ideas })
@@ -265,10 +275,15 @@ router.get('/rating', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
     ideas.sort((a, b) => (b.rateScore > a.rateScore) ? 1 : -1)
@@ -295,11 +310,16 @@ router.get('/ideaDetail/:id', async (req, res) => {
     let commentNumber = 0
     let commentByIdea = []
     let dateShow = ""
-    for(const comment of comments){
-        for (const user of users) {
-            if (user._id == comment.userId) {
-                comment['user'] = user.userName
+    for(const comment of comments){ 
+        if(comment.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == comment.userId) {
+                    comment['user'] = user.userName
+                }
             }
+        }
+        else{
+            comment['user'] = "Anonymous"
         }
 
         dateShow = comment.date.toLocaleString()
@@ -325,10 +345,15 @@ router.get('/ideaDetail/:id', async (req, res) => {
     idea['likeNumber'] = likeNumber
     idea['dislikeNumber'] = dislikeNumber
 
-    for (const user of users) {
-        if (user._id == idea.user) {
-            idea['username'] = user.userName
+    if(idea.anonymous!="Yes"){  
+        for (const user of users) {
+            if (user._id == idea.user) {
+                idea['user'] = user.userName
+            }
         }
+    }
+    else{
+        idea['user'] = "Anonymous"
     }
 
     idea['dateShow'] = idea.date.toLocaleString()
@@ -344,16 +369,15 @@ router.get('/ideaDetail/:id', async (req, res) => {
 })
 
 router.post('/ideaDetail/addComment',async (req,res)=>{
+    const anonymous = req.body.anonymous
     const ideaId = req.body.ideaId
     const idea = await Idea.findById(ideaId)
     const course = idea.course
-    const courseObjects = await Course.findOne({courseName:course})
+    const courseObject = await Course.findOne({courseName:course})
     const commentDate = new Date(Date.now())
     const commentDateTime = commentDate.getTime()
     let courseDateTime = ""
-    for(const courseObject of courseObjects){
-        courseDateTime = courseObject.deadLine2Time
-    }
+    courseDateTime = courseObject.deadLine2Time
     if(commentDateTime < courseDateTime){
         const text = req.body.txtComment      
         const userId = req.body.userId
@@ -362,12 +386,13 @@ router.post('/ideaDetail/addComment',async (req,res)=>{
             text: text,
             ideaId: ideaId,
             userId: userId,
+            anonymous: anonymous,
             date: new Date(Date.now())
         }
         //await insertObject("Comment", objectToInsert)
         const newComment = new Comment(objectToInsert)
         await newComment.save()
-
+        
         //SEND AUTOMATIC EMAIL
         const userIdeaID = req.body.userIdeaID
         const userOfIdea = await User.findById(userIdeaID)
@@ -398,6 +423,7 @@ router.post('/ideaDetail/addComment',async (req,res)=>{
         
     }
     else{
+        alert("Comment section is closed.")
         res.redirect('/staff/ideaDetail/' + ideaId)
     }
 })

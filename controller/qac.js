@@ -27,11 +27,16 @@ router.get('/qac', async (req, res) => {
             idea['commentNumber'] = commentNumber
         }
 
-        for(const user of users){
-            if(user._id == idea.user){
-                idea['user'] = user.userName        
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
-        }      
+        }
+        else{
+            idea['user'] = "Anonymous"
+        }  
     }
     res.render('qac/quality_assurance_coordinator',{model:ideas})
 })
@@ -74,10 +79,15 @@ router.get('/view', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
 
@@ -122,10 +132,15 @@ router.get('/date', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
     res.render('qac/quality_assurance_coordinator',{model:ideas})
@@ -169,10 +184,15 @@ router.get('/rating', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
     ideas.sort((a, b) => (b.rateScore > a.rateScore) ? 1 : -1)
@@ -193,10 +213,15 @@ router.get('/ideaDetail/:id', async (req, res) => {
     let commentByIdea = []
     let dateShow = ""
     for(const comment of comments){
-        for (const user of users) {
-            if (user._id == comment.userId) {
-                comment['user'] = user.userName
+        if(comment.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == comment.userId) {
+                    comment['user'] = user.userName
+                }
             }
+        }
+        else{
+            comment['user'] = "Anonymous"
         }
 
         dateShow = comment.date.toLocaleString()
@@ -222,10 +247,15 @@ router.get('/ideaDetail/:id', async (req, res) => {
     idea['likeNumber'] = likeNumber
     idea['dislikeNumber'] = dislikeNumber
 
-    for (const user of users) {
-        if (user._id == idea.user) {
-            idea['user'] = user.userName
+    if(idea.anonymous!="Yes"){  
+        for (const user of users) {
+            if (user._id == idea.user) {
+                idea['user'] = user.userName
+            }
         }
+    }
+    else{
+        idea['user'] = "Anonymous"
     }
 
     idea['dateShow'] = idea.date.toLocaleString()

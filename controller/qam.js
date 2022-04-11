@@ -181,9 +181,15 @@ router.get('/ideaDetail/:id', async (req, res) => {
     idea['dateShow'] = idea.date.toLocaleString()
 
     for (const user of users) {
-        if (user._id == idea.user) {
-            idea['user'] = user.userName
-
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
+            }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
     //Increase view
@@ -294,10 +300,15 @@ router.get('/view', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
 
@@ -340,10 +351,15 @@ router.get('/date', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
 
@@ -387,10 +403,15 @@ router.get('/rating', async (req, res) => {
         idea['dislikeNumber'] = dislikeNumber
         idea['rateScore'] = rateScore
 
-        for (const user of users) {
-            if (user._id == idea.user) {
-                idea['user'] = user.userName
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
             }
+        }
+        else{
+            idea['user'] = "Anonymous"
         }
     }
     ideas.sort((a, b) => (b.rateScore > a.rateScore) ? 1 : -1)
