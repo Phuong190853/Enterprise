@@ -38,7 +38,9 @@ router.get('/qac', async (req, res) => {
             idea['user'] = "Anonymous"
         }  
     }
-    res.render('qac/quality_assurance_coordinator',{model:ideas})
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+    res.render('qac/quality_assurance_coordinator',{model:ideas, user: user})
 })
 
 router.get('/view', async (req, res) => {
@@ -90,8 +92,7 @@ router.get('/view', async (req, res) => {
             idea['user'] = "Anonymous"
         }
     }
-
-    res.render('qac/quality_assurance_coordinator',{model:ideas})
+    res.render('qac/quality_assurance_coordinator',{model:ideas, user:user})
 })
 
 router.get('/date', async (req, res) => {
@@ -143,7 +144,7 @@ router.get('/date', async (req, res) => {
             idea['user'] = "Anonymous"
         }
     }
-    res.render('qac/quality_assurance_coordinator',{model:ideas})
+    res.render('qac/quality_assurance_coordinator',{model:ideas, user:user})
 })
 
 router.get('/rating', async (req, res) => {
@@ -197,7 +198,7 @@ router.get('/rating', async (req, res) => {
     }
     ideas.sort((a, b) => (b.rateScore > a.rateScore) ? 1 : -1)
 
-    res.render('qac/quality_assurance_coordinator',{model:ideas})
+    res.render('qac/quality_assurance_coordinator',{model:ideas,user:user})
 })
 
 
@@ -267,8 +268,9 @@ router.get('/ideaDetail/:id', async (req, res) => {
 
     let ideas = []
     ideas.push(idea)
+    const user = await User.findOne({_id:userId})
 
-    res.render('qac/quality_assurance_coordinator_idea_detail',{model:ideas, comments:commentByIdea})
+    res.render('qac/quality_assurance_coordinator_idea_detail',{model:ideas, comments:commentByIdea, user: user})
 })
 
 module.exports = router;

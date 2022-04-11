@@ -23,8 +23,9 @@ router.get('/addIdea', async (req, res) => {
     }
     
     const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
 
-    res.render('staff/staff_add_idea', {categories:categories, courses:courses, userId:userId})
+    res.render('staff/staff_add_idea', {categories:categories, courses:courses, userId:userId, user:user})
 })
 
 const storage = multer.diskStorage({
@@ -185,8 +186,10 @@ router.get('/view', async (req, res) => {
             idea['user'] = "Anonymous"
         }
     }
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
 
-    res.render('staff/staff', { model: ideas })
+    res.render('staff/staff', { model: ideas, user:user })
 })
 
 router.get('/date', async (req, res) => {
@@ -236,7 +239,10 @@ router.get('/date', async (req, res) => {
             idea['user'] = "Anonymous"
         }
     }
-    res.render('staff/staff', { model: ideas })
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+
+    res.render('staff/staff', { model: ideas, user:user })
 })
 
 router.get('/rating', async (req, res) => {
@@ -288,7 +294,10 @@ router.get('/rating', async (req, res) => {
     }
     ideas.sort((a, b) => (b.rateScore > a.rateScore) ? 1 : -1)
 
-    res.render('staff/staff', { model: ideas })
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+
+    res.render('staff/staff', { model: ideas, user:user })
 })
 
 //Idea detail
@@ -364,8 +373,9 @@ router.get('/ideaDetail/:id', async (req, res) => {
 
     let ideas = []
     ideas.push(idea)
+    const user = await User.findOne({_id:userId})
     
-    res.render('staff/staff_idea_detail',{model:ideas, comments:commentByIdea, userId:userId})
+    res.render('staff/staff_idea_detail',{model:ideas, comments:commentByIdea, userId:userId, user:user})
 })
 
 router.post('/ideaDetail/addComment',async (req,res)=>{
