@@ -159,15 +159,26 @@ router.get('/ideaDetail/:id', async (req, res) => {
     let commentNumber = 0
     let commentByIdea = []
     let dateShow = ""
-        for(const comment of comments){
-            dateShow = comment.date.toLocaleString()
-            comment['dateShow'] = dateShow
-            
-            if(idea._id == comment.ideaId){
-                commentNumber += 1
-                commentByIdea.push(comment)
-            }      
+    for(const comment of comments){
+        if(comment.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == comment.userId) {
+                    comment['user'] = user.userName
+                }
+            }
         }
+        else{
+            comment['user'] = "Anonymous"
+        }
+        
+        dateShow = comment.date.toLocaleString()
+        comment['dateShow'] = dateShow
+        
+        if(idea._id == comment.ideaId){
+            commentNumber += 1
+            commentByIdea.push(comment)
+        }      
+    }
     idea['commentNumber'] = commentNumber
     let likeNumber = 0
     let dislikeNumber = 0
