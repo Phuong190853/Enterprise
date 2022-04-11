@@ -13,12 +13,17 @@ router.post('/doLogin', async (req,res)=>{
     
     var user  = await User.findOne({userName:nameInput});
 
-    const validPassword = await bcrypt.compare(passInput, user.password);
-    if(!user || !validPassword){  //if(!user || !validPassword)
-        res.render("login", {message: 'Username or password is invalid!'})
-    }else{
+    
+    if(!user){
+        
+        res.render("login", {message: 'Username is not existed!'})
+    }else if(user){
+        const validPassword = await bcrypt.compare(passInput, user.password);
 
-        req.session.userId = user._id
+        if(!validPassword){
+            res.render("login", {message: 'Password is invalid!'})
+        }else{
+            req.session.userId = user._id
 
         if(user.role == 'Quality Assurance Manager'){
             res.redirect('/qam/date')
@@ -29,6 +34,8 @@ router.post('/doLogin', async (req,res)=>{
         }else if(user.role == 'Quality Assurance Coordinator'){
             res.redirect('/qac/qac')
         }
+        }
+        
     }
 
 
