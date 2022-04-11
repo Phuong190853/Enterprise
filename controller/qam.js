@@ -16,7 +16,9 @@ const Idea = require('../model/idea.model')
 
 router.get('/categories', async (req,res)=>{
     const categories = await Category.find().lean()
-    res.render('qam/categories', {model:categories})
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+    res.render('qam/categories', {model:categories, user: user})
 })
 
 router.post('/addCat',async (req,res)=>{
@@ -42,7 +44,9 @@ router.get('/deleteCat', async (req, res) => {
 router.get('/editCat/:id', async (req, res) => {
     const idValue = req.params.id
     const category = await Category.findById(idValue)
-    res.render('qam/editCategory', {category:category})
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+    res.render('qam/editCategory', {category:category, user:user})
 })
 
 
@@ -68,8 +72,9 @@ router.get('/downloadCSV', async(req, res)=>{
     for (const course of courses){
         course['timeNow'] = timeNow
     }
-    
-    res.render('qam/quality_assurance_manager_download_csv', {model:courses})
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+    res.render('qam/quality_assurance_manager_download_csv', {model:courses, user: user})
     
 })
 
@@ -200,7 +205,9 @@ router.get('/ideaDetail/:id', async (req, res) => {
     let ideas = []
     ideas.push(idea)
     console.log(commentByIdea)
-    res.render('qam/quality_assurance_manager_idea_detail',{model:ideas, comments:commentByIdea})
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+    res.render('qam/quality_assurance_manager_idea_detail',{model:ideas, comments:commentByIdea, user: user})
 })
 
 router.get('/dashboard', async(req, res)=>{
@@ -259,8 +266,10 @@ router.get('/dashboard', async(req, res)=>{
         if (error) throw error;
         console.log("Write csv file successfully!");
     });
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
 
-    res.render('qam/quality_assurance_manager_dashboard', {ideas: await Idea.countDocuments(), courses: await Course.countDocuments(), users: await User.countDocuments()})
+    res.render('qam/quality_assurance_manager_dashboard', {ideas: await Idea.countDocuments(), courses: await Course.countDocuments(), users: await User.countDocuments(), user: user})
 })
 
 //Main view all idea
@@ -311,8 +320,10 @@ router.get('/view', async (req, res) => {
             idea['user'] = "Anonymous"
         }
     }
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
 
-    res.render('qam/quality_assurance_manager', { model: ideas})
+    res.render('qam/quality_assurance_manager', { model: ideas, user: user})
 })
 
 router.get('/date', async (req, res) => {
@@ -362,9 +373,11 @@ router.get('/date', async (req, res) => {
             idea['user'] = "Anonymous"
         }
     }
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
 
     //await getUsername()
-    res.render('qam/quality_assurance_manager', { model: ideas})
+    res.render('qam/quality_assurance_manager', { model: ideas, user: user})
 })
 
 router.get('/rating', async (req, res) => {
@@ -416,7 +429,9 @@ router.get('/rating', async (req, res) => {
     }
     ideas.sort((a, b) => (b.rateScore > a.rateScore) ? 1 : -1)
 
-    res.render('qam/quality_assurance_manager', { model: ideas})
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+    res.render('qam/quality_assurance_manager', { model: ideas, user: user})
 })
 
 module.exports = router;
