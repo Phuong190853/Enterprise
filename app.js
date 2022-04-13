@@ -51,6 +51,10 @@ hbs.registerHelper("compareEq", function(value1, value2, options){
 //CONTROLLERS
 var authMiddleware = require("./middleware/auth.middleware") //Authentication and authorization middleware
 
+app.get('/',async (req,res)=>{
+    res.redirect('/login')
+})
+
 const loginController = require('./controller/login')
 app.use('/login',  loginController)
 
