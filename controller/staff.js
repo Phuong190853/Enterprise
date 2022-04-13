@@ -472,7 +472,8 @@ router.post('/rate/:id', async (req,res)=>{
         const newRating = new Rating(objectToInsert)
         await newRating.save()
     }
-    res.redirect('/staff/rating')
+    res.redirect('back')
+    //res.redirect('/staff/rating')
 })
 
 module.exports = router;
