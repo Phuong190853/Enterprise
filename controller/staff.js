@@ -357,12 +357,12 @@ router.get('/ideaDetail/:id', async (req, res) => {
     if(idea.anonymous!="Yes"){  
         for (const user of users) {
             if (user._id == idea.user) {
-                idea['user'] = user.userName
+                idea['username'] = user.userName
             }
         }
     }
     else{
-        idea['user'] = "Anonymous"
+        idea['username'] = "Anonymous"
     }
 
     idea['dateShow'] = idea.date.toLocaleString()
@@ -399,6 +399,7 @@ router.post('/ideaDetail/addComment',async (req,res)=>{
             anonymous: anonymous,
             date: new Date(Date.now())
         }
+        console.log(objectToInsert)
         //await insertObject("Comment", objectToInsert)
         const newComment = new Comment(objectToInsert)
         await newComment.save()
@@ -407,6 +408,7 @@ router.post('/ideaDetail/addComment',async (req,res)=>{
         const userIdeaID = req.body.userIdeaID
         const userOfIdea = await User.findById(userIdeaID)
         const userOfComment = await User.findById(userId)
+        
         const transport = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
