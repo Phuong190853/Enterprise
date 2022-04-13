@@ -388,9 +388,10 @@ router.post('/ideaDetail/addComment',async (req,res)=>{
     const commentDateTime = commentDate.getTime()
     let courseDateTime = ""
     courseDateTime = courseObject.deadLine2Time
+    
     if(commentDateTime < courseDateTime){
-        const text = req.body.txtComment      
-        const userId = req.body.userId
+        const text = req.body.txtComment   
+        const userId = req.body.userId   
         const objectToInsert = {
             _id: mongoose.Types.ObjectId(),
             text: text,
@@ -405,7 +406,7 @@ router.post('/ideaDetail/addComment',async (req,res)=>{
         await newComment.save()
         
         //SEND AUTOMATIC EMAIL
-        const userIdeaID = req.body.userIdeaID
+        const userIdeaID = idea.user
         const userOfIdea = await User.findById(userIdeaID)
         const userOfComment = await User.findById(userId)
         
@@ -430,13 +431,14 @@ router.post('/ideaDetail/addComment',async (req,res)=>{
             }
             console.log('Email sent: ' + info.response);
         });
-
-        res.redirect('/staff/ideaDetail/' + ideaId)
+        res.redirect('back')
+        //res.redirect('/staff/ideaDetail/' + ideaId)
         
     }
     else{
         alert("Comment section is closed.")
-        res.redirect('/staff/ideaDetail/' + ideaId)
+        res.redirect('back')
+        //res.redirect('/staff/ideaDetail/' + ideaId)
     }
 })
 
