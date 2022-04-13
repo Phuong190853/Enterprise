@@ -442,7 +442,7 @@ router.post('/rate/:id', async (req,res)=>{
     const ideaId = req.params.id //Dung hidden field
     const userId = req.session.userId //Truyen vao tu token
     const rate = req.body.rate
-    const ratings = await Rating.find().lean()
+    const ratings = await Rating.find()
     let exist = 0
     for (const rating of ratings) {
         if (rating.userId == userId && rating.ideaId == ideaId) {
@@ -464,6 +464,7 @@ router.post('/rate/:id', async (req,res)=>{
     }
     if (exist == 0) {
         const objectToInsert = {
+            _id: mongoose.Types.ObjectId(),
             rate: rate,
             ideaId: ideaId,
             userId: userId,
