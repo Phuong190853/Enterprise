@@ -191,7 +191,61 @@ router.get('/view', async (req, res) => {
 
     res.render('staff/staff', { model: ideas, user:user })
 })
+/*
+router.get('/view/:page', async (req, res) => {
+    const page = req.params.page
+    const ideas = await Idea.find().sort({views:-1}).limit(10*page).skip(10*(page-1)).lean()
+    const users = await User.find().lean()
+    const comments = await Comment.find().lean()
+    const ratings = await Rating.find().lean()
 
+    let dateShow = ""
+    for (const idea of ideas) {
+        dateShow = idea.date.toLocaleString()
+        idea['dateShow'] = dateShow
+
+        let commentNumber = 0
+        for (const comment of comments) {
+            if (idea._id == comment.ideaId) {
+                commentNumber += 1
+            }
+        }
+        idea['commentNumber'] = commentNumber
+
+        let likeNumber = 0
+        let dislikeNumber = 0
+        for (const rate of ratings) {
+            if (idea._id == rate.ideaId) {
+                if (rate.rate == "Like") {
+                    likeNumber += 1
+                }
+                else if (rate.rate == "Dislike") {
+                    dislikeNumber += 1
+                }
+            }
+        }
+        rateScore = likeNumber - dislikeNumber
+        idea['likeNumber'] = likeNumber
+        idea['dislikeNumber'] = dislikeNumber
+        idea['rateScore'] = rateScore
+
+        if(idea.anonymous!="Yes"){  
+            for (const user of users) {
+                if (user._id == idea.user) {
+                    idea['user'] = user.userName
+                }
+            }
+        }
+        else{
+            idea['user'] = "Anonymous"
+        }
+    }
+    const userId = req.session.userId
+    const user = await User.findOne({_id:userId})
+
+    res.render('staff/staff', { model: ideas, user:user })
+})
+*/
 router.get('/date', async (req, res) => {
     const ideas = await Idea.find().sort({date:-1}).lean()
     const users = await User.find().lean()

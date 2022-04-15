@@ -39,12 +39,12 @@
                 {{/each}}
 
                 <p>
-                    <form action="rate/{{_id}}" method="post">
+                    <form action="/staff/rate/{{_id}}" method="post">
                         <button type="submit" name="rate" value="Like" class="btn-link"><i class="far fa-thumbs-up"></i>{{likeNumber}} Like</button>
                         <button type="submit" name="rate" value="Dislike" class="btn-link"><i class="far fa-thumbs-down"></i>{{dislikeNumber}} Dislike</button>
                     
                         <span class="float-right">
-                            <a href="ideaDetail/{{_id}}" class="link-black text-sm">
+                            <a href="/staff/ideaDetail/{{_id}}" class="link-black text-sm">
                                 <i class="far fa-comments mr-1">Comments ({{commentNumber}})</i> 
                             </a>
                         </span>

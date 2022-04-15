@@ -35,7 +35,7 @@
                             <td>{{role}}</td>
                             <td>{{department}}</td>
                             <td>
-                                <a href="/admin/editUser/{{this._id}}"><i class="far fa-edit fa-lg ml-1"></i>&nbsp&nbsp</a>
+                                <a href="/admin/editUser/{{this._id}}"><i class="far fa-edit fa-lg ml-1"></i></a>
                                 {{#compareEq userName currentUser}}
                                 <a href="/admin/deleteUser/{{this._id}}" onclick="return confirmDelete();"><i class="fas fa-trash-alt fa-lg text-danger"></i></a>
                                 {{/compareEq}}
