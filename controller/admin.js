@@ -93,7 +93,6 @@ router.post('/editUser', async (req, res) => {
 
     await User.findByIdAndUpdate(id, {$set:{
         userName: name,
-        password: pass,
         role: role,
         email: email,
         department: department}})
