@@ -55,35 +55,18 @@ router.post('/addIdea', upload.array('txtFile', 5), async (req, res) => {
     const ideaDateTime = ideaDate.getTime()
     let courseDateTime = ""
     const qacMailList = []
-
     const user = req.body.txtUser
     const idea = req.body.txtIdea
-    //const course = req.body.txtCourse
     const category = req.body.txtCategory
     const file = req.files
-
-
     const userObject =  await User.findById(user)
     const userName = userObject.userName
     const department = userObject.department
-    const qacToMail = await User.find({department:department, role:'Quality Assurance Coordinator' })
-    
+    const qacToMail = await User.find({department:department, role:'Quality Assurance Coordinator' })   
     for(const qactomail of qacToMail){
         const qacMail = qactomail.email
         qacMailList.push(qacMail)
     }
-    //Lay user
-    //Lay department cua user
-    //Lay tat ca qac cua department do (Goi db)
-    //Lay email cua cac qac do
-
-    // for(const courseObject of courseObjects){
-    //     courseDateTime = courseObject.deadLine1Time
-    // }
-    console.log(ideaDateTime)
-    //const time = courseObjects.deadLine1Time
-    //console.log(courseObjects.deadLine1Time)
-    console.log(courseObjects)
     if(ideaDateTime < courseObjects.deadLine1Time){
         try {
             const objectToInsert = {
@@ -98,11 +81,9 @@ router.post('/addIdea', upload.array('txtFile', 5), async (req, res) => {
                 views: 0,
                 date: new Date(Date.now())
             }
-            //await insertObject("Idea", objectToInsert)
             const newIdea = new Idea(objectToInsert)
             await newIdea.save()
             console.log(objectToInsert)
-
             //SEND AUTOMATIC EMAIL
             const transport = nodemailer.createTransport({
                 service: 'Gmail',
@@ -110,9 +91,7 @@ router.post('/addIdea', upload.array('txtFile', 5), async (req, res) => {
                     user: 'group4enterprise2022@gmail.com',
                     pass: 'group45678',
                 },
-            });
-
-            
+            });         
             for(const emai of qacMailList){
                 const mailOptions = {
                     from: 'group4enterprise2022@gmail.com',
@@ -504,19 +483,11 @@ router.post('/rate/:id', async (req,res)=>{
     let exist = 0
     for (const rating of ratings) {
         if (rating.userId == userId && rating.ideaId == ideaId) {
-            // let updateValues = {
-            //     $set: {
-            //         rate: rate,
-            //         ideaId: ideaId,
-            //         userId: userId,
-            //     }
-            // };
             await Rating.findByIdAndUpdate(rating._id, {$set:{
                 rate: rate,
                 ideaId: ideaId,
                 userId: userId,
             }})
-            //await updateDocument(rating._id, updateValues, "Rating")
             exist = 1
         }
     }
@@ -531,7 +502,6 @@ router.post('/rate/:id', async (req,res)=>{
         await newRating.save()
     }
     res.redirect('back')
-    //res.redirect('/staff/rating')
 })
 
 module.exports = router;

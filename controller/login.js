@@ -34,11 +34,8 @@ router.post('/doLogin', async (req,res)=>{
         }else if(user.role == 'Quality Assurance Coordinator'){
             res.redirect('/qac/qac')
         }
-        }
-        
+        }     
     }
-
-
 })
 
 router.get('/logout', function(req, res) {

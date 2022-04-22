@@ -4,6 +4,7 @@ const fs = require('fs')
 const admzip = require('adm-zip')
 const json2csvParser  = require("json2csv").parse;
 
+var alert = require('alert')
 var mongoose = require('mongoose')
 const User = require('../model/user.model')
 const Course = require('../model/course.model')
@@ -24,15 +25,23 @@ router.get('/categories', async (req,res)=>{
 router.post('/addCat',async (req,res)=>{
     const category = req.body.txtCategory
     const description = req.body.txtDescription
-
-    const objectToInsert = {
-        _id: mongoose.Types.ObjectId(),
-        category: category,
-        description: description,
+    const categoryObject = await Category.findOne({category:category})
+    if(categoryObject===null)
+    {
+        const objectToInsert = {
+            _id: mongoose.Types.ObjectId(),
+            category: category,
+            description: description,
+        }
+        const newCategory = new Category(objectToInsert)
+        await newCategory.save()
+        res.redirect('/qam/categories')
     }
-    const newCategory = new Category(objectToInsert)
-    await newCategory.save()
-    res.redirect('/qam/categories')
+    else{
+        alert("Category with that name has already exist.")
+        res.redirect('/qam/categories')
+    }
+    //res.redirect('/qam/categories')
 })
 
 router.get('/deleteCat', async (req, res) => {

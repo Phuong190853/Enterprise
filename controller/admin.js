@@ -3,6 +3,7 @@ const router = express.Router()
 const date = require('date-and-time')
 const bcrypt = require("bcrypt");
 
+var alert = require("alert")
 var mongoose = require('mongoose')
 const User = require('../model/user.model')
 const Course = require('../model/course.model')
@@ -50,20 +51,28 @@ router.post('/addUsers',async (req,res)=>{
     const role = req.body.txtRole
     const email = req.body.txtEmail
     const department = req.body.txtDepartment
-
-    const salt = await bcrypt.genSalt(10);
-
-    const objectToInsert = {
-        _id: mongoose.Types.ObjectId(),
-        userName: name,
-        password: await bcrypt.hash(pass, salt),
-        role: role,
-        email: email,
-        department: department
+    const userObject = await User.findOne({userName:name})
+    const userObject2 = await User.findOne({email:email})
+    if(userObject!==null)
+    {
+        alert("User with that username has already exist.")
     }
-
-    const newUser = new User(objectToInsert)
-    await newUser.save()
+    else if(userObject2!==null){
+        alert("User with that email has already exist.")
+    }
+    else{
+        const salt = await bcrypt.genSalt(10);
+        const objectToInsert = {
+            _id: mongoose.Types.ObjectId(),
+            userName: name,
+            password: await bcrypt.hash(pass, salt),
+            role: role,
+            email: email,
+            department: department
+        }
+        const newUser = new User(objectToInsert)
+        await newUser.save()
+    }
     res.redirect('/admin/addUsers')
 })
 
@@ -88,15 +97,23 @@ router.post('/editUser', async (req, res) => {
     const role = req.body.txtRole
     const email = req.body.txtEmail
     const department = req.body.txtDepartment
-
-    const salt = await bcrypt.genSalt(10);
-
-    await User.findByIdAndUpdate(id, {$set:{
-        userName: name,
-        role: role,
-        email: email,
-        department: department}})
-    
+    const userObject = await User.findOne({userName:name})
+    const userObject2 = await User.findOne({email:email})
+    if(userObject!==null)
+    {
+        alert("User with that username has already exist.")
+    }
+    else if(userObject2!==null){
+        alert("User with that email has already exist.")
+    }
+    else{
+        const salt = await bcrypt.genSalt(10);
+        await User.findByIdAndUpdate(id, {$set:{
+            userName: name,
+            role: role,
+            email: email,
+            department: department}})
+    } 
     res.redirect("/admin/addUsers")
 })
 
