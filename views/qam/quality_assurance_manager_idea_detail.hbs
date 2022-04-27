@@ -14,17 +14,21 @@
         <div class="row mb-5" >
             <div class="border container rounded-3 p-5 mb-3">
                 <div class="row">
-                    <div class="col-1">
+                    <div class="col-md-1 col-sm-2 col-xs-2">
 				    	<i class="far fa-user-circle fa-3x"></i>
 				    </div>
-                    <div class="col-6">
-				    	{{#if anonymous}}
+                    <div class="col-md-6 col-sm-5 col-xs-5">
+                        {{#if anonymous}}
 				    	<div class="row"> <a href="/qam/ideaDetail/{{this._id}}" class="">Anonymous</a> </div>
                         {{else}}
                         <div class="row"> <a href="/qam/ideaDetail/{{this._id}}" class="">{{user}}</a> </div>
                         {{/if}}
-                        
+				    	
 				    	<div class="row">{{dateShow}}</div>
+				    </div>
+                    <div class="col-md-5 col-sm-5 col-xs-5">
+				    	<div class="row float-right">Course: {{course}}</div> <br>
+				    	<div class="row float-right">Category: {{category}}</div>
 				    </div>
                 </div>
                 <div class="row mt-2 ml-1">
